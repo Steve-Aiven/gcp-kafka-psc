@@ -4,40 +4,32 @@ This Terraform configuration sets up an Aiven Kafka service with Google Cloud Pr
 
 ## Architecture Overview
 
-```
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           Your GCP Project                                       │
-│  ┌─────────────────────────────────────────────────────────────────────────┐    │
-│  │                         VPC Network                                      │    │
-│  │                                                                          │    │
-│  │   ┌──────────────┐      ┌──────────────┐      ┌──────────────────┐      │    │
-│  │   │   Test VM    │      │ PSC Endpoint │      │ Forwarding Rule  │      │    │
-│  │   │              │─────▶│    :9706     │─────▶│  (PSC Endpoint)  │──────┼────┼───┐
-│  │   │              │      │              │      │                  │      │    │   │
-│  │   └──────────────┘      └──────────────┘      └──────────────────┘      │    │   │
-│  │                                                                          │    │   │
-│  └─────────────────────────────────────────────────────────────────────────┘    │   │
-└─────────────────────────────────────────────────────────────────────────────────┘   │
-                                                                                       │
-                            Google Private Network (no public internet)                │
-                                                                                       │
-┌─────────────────────────────────────────────────────────────────────────────────┐   │
-│                         Aiven Managed Service                                    │   │
-│  ┌─────────────────────────────────────────────────────────────────────────┐    │   │
-│  │                       Aiven Project VPC                                  │    │   │
-│  │                                                                          │    │   │
-│  │   ┌──────────────────┐      ┌─────────────────────────────────────┐     │    │   │
-│  │   │ Service          │      │         Kafka Cluster               │     │    │   │
-│  │   │ Attachment       │─────▶│  ┌─────────┬─────────┬─────────┐   │     │    │   │
-│  │   │                  │◀─────┼──│Broker 1 │Broker 2 │Broker 3 │   │     │    │   │
-│  │   └──────────────────┘      │  └─────────┴─────────┴─────────┘   │     │    │   │
-│  │           ▲                 └─────────────────────────────────────┘     │    │   │
-│  │           │                                                              │    │   │
-│  └───────────┼──────────────────────────────────────────────────────────────┘    │   │
-│              │                                                                    │   │
-└──────────────┼────────────────────────────────────────────────────────────────────┘   │
-               │                                                                        │
-               └────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+  subgraph GCP["Your GCP Project"]
+    subgraph VPC["VPC Network"]
+      VM["Test VM"]
+      PSC["PSC Endpoint\n:9706"]
+      FR["Forwarding Rule\n(PSC Endpoint)"]
+      VM --> PSC --> FR
+    end
+  end
+
+  PN["Google Private Network\n(no public internet)"]
+
+  subgraph Aiven["Aiven Managed Service"]
+    subgraph AivenVPC["Aiven Project VPC"]
+      SA["Service Attachment"]
+      subgraph Kafka["Kafka Cluster"]
+        B1["Broker 1"]
+        B2["Broker 2"]
+        B3["Broker 3"]
+      end
+      SA --> Kafka
+    end
+  end
+
+  FR --> PN --> SA
 ```
 
 **Connection Flow:**
