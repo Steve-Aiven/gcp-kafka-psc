@@ -1,0 +1,59 @@
+# =============================================================================
+# Aiven Kafka with GCP Private Service Connect - Example Configuration
+# =============================================================================
+# Copy this file to terraform.tfvars and update with your values:
+#   cp terraform.tfvars.example terraform.tfvars
+#
+# IMPORTANT: Never commit terraform.tfvars to version control!
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Aiven Configuration
+# -----------------------------------------------------------------------------
+# Note: Set your Aiven API token as an environment variable, not here:
+#   export TF_VAR_aiven_token="your-aiven-api-token"
+
+aiven_project = "your-aiven-project"  # Your Aiven project name
+
+# -----------------------------------------------------------------------------
+# GCP Configuration
+# -----------------------------------------------------------------------------
+gcp_project_id   = "your-gcp-project"      # Your GCP project ID
+gcp_network_name = "your-vpc-network"      # Existing VPC network name
+gcp_region       = "us-central1"           # GCP region for resources
+gcp_zone         = "us-central1-a"         # GCP zone for the test VM
+
+# -----------------------------------------------------------------------------
+# Kafka Service Configuration
+# -----------------------------------------------------------------------------
+kafka_service_name = "kafka-psc-demo"      # Name for the Kafka service
+kafka_plan         = "business-4"          # Aiven Kafka plan
+kafka_cloud_name   = "google-us-central1"  # Aiven cloud region
+
+# -----------------------------------------------------------------------------
+# Network Configuration
+# -----------------------------------------------------------------------------
+# These CIDRs must not overlap with your existing VPC subnets
+aiven_vpc_cidr  = "10.10.0.0/24"           # CIDR for Aiven Project VPC
+psc_subnet_cidr = "10.100.0.0/24"          # CIDR for PSC subnet
+vm_subnet_cidr  = "10.100.1.0/24"          # CIDR for VM subnet (also hosts PSC IP)
+
+# -----------------------------------------------------------------------------
+# Test VM Configuration
+# -----------------------------------------------------------------------------
+enable_test_vm      = true                 # Set to false to skip VM creation
+vm_machine_type     = "e2-micro"           # VM machine type
+vm_enable_public_ip = true                 # Set to false to use IAP tunneling
+
+# Optional: SSH public key for direct access (if not using OS Login)
+# ssh_public_key = "ssh-ed25519 AAAA... user@example.com"
+
+# -----------------------------------------------------------------------------
+# Demo Producer Configuration
+# -----------------------------------------------------------------------------
+demo_topic_name                = "demo-topic"  # Topic for demo messages
+demo_topic_partitions          = 3
+demo_topic_replication         = 2
+enable_demo_producer           = true          # Auto-produce messages to topic
+demo_producer_interval_seconds = 2             # Seconds between messages
+demo_producer_message_prefix   = "psc-demo"    # Prefix for demo messages
