@@ -375,7 +375,7 @@ Set `enable_test_vm = false` to skip the test VM.
 
 ## Additional Resources
 
-- [Aiven Private Service Connect Documentation](https://docs.aiven.io/docs/platform/howto/use-gcp-private-service-connect)
+- [Aiven Private Service Connect Documentation](https://docs.aiven.io/docs/platform/howto/use-google-private-service-connect)
 - [Google Cloud Private Service Connect](https://cloud.google.com/vpc/docs/private-service-connect)
 - [Aiven Terraform Provider](https://registry.terraform.io/providers/aiven/aiven/latest/docs)
 - [Google Terraform Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
