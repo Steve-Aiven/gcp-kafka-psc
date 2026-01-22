@@ -77,6 +77,7 @@ echo ""
 echo "=========================================="
 echo "2. Connecting to VM and running checks..."
 echo "=========================================="
+echo -e "${YELLOW}Note: VM services and /etc/hosts updates can take a few minutes after provisioning. If checks fail, wait for all services to start and retry.${NC}"
 
 # Build the remote script
 REMOTE_SCRIPT=$(cat <<'SCRIPT'

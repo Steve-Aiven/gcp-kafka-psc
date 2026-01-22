@@ -108,6 +108,8 @@ terraform plan
 terraform apply
 ```
 
+Note: PSC approval can be asynchronous. If `connection_state` is still `PENDING` after the first apply, wait a minute and run `terraform apply` again from the `terraform/` directory.
+
 The apply takes approximately 15-20 minutes:
 - Aiven VPC: ~1 minute
 - Kafka cluster: ~7-10 minutes
@@ -264,7 +266,6 @@ resource "aiven_gcp_privatelink_connection_approval" "psc_approval" {
 
 ### Common Issues
 
-- **After maintenance/upgrades:** PSC connections may need re-approval following Aiven service maintenance or upgrades
 - **DNS resolution:** The privatelink hostname must resolve to your PSC endpoint IP (configured via `/etc/hosts` or Cloud DNS)
 - **Multiple connections:** When using multiple PSC connections, use the Aiven CLI to retrieve connection information for each `PRIVATELINK_CONNECTION_ID`
 
